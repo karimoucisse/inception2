@@ -1,0 +1,39 @@
+services:
+  nginx:
+    container_name: nginx
+    build: requirements/nginx
+    env_file: .env
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    env_file: .env
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - inception
+    build: requirements/wordpress
+    expose:
+      - "9000"
+    restart: always
+
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/cisse/data/wordpress
+
+networks:
+  inception:
+    driver: bridge
