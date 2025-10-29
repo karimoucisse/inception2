@@ -21,11 +21,11 @@ mariadb -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}
 mariadb -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%' WITH GRANT OPTION;"
 mariadb -e "FLUSH PRIVILEGES;"
 
-echo "MariaDB configured successfully."
 
+echo "MariaDB configured successfully."
 # mariadb -e "SELECT User FROM mysql.user;"
 
 mysqladmin shutdown
-
+echo "MariaDB container is running ..."
 exec mysqld_safe
 

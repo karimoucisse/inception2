@@ -38,7 +38,7 @@ wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" --admin_user="$ADMIN_US
 # # Available role: 'administrator', 'editor', 'author', 'contributor', 'subscriber'
 wp user create "$SIMPLE_USER" "$SIMPLE_USER_EMAIL" --user_pass="$SIMPLE_USER_PASS" --role="$USER_ROLE" --allow-root
 
-echo "Starting PHP-FPM..."
+echo "Wordpress container is running ..."
 exec /usr/sbin/php-fpm8.2 -F
 
 

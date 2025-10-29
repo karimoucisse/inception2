@@ -24,4 +24,7 @@ echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 apachectl configtest
 
-exec service apache2 restart
+# service apache2 restart
+echo "Adminer container is running ..."
+
+exec apache2ctl -D FOREGROUND
