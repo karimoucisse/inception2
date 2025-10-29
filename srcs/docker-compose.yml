@@ -40,6 +40,16 @@ services:
       - "9000"
     restart: always
 
+  adminer:
+    container_name: adminer
+    env_file: .env
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    build: requirements/bonus/adminer
+    restart: always
+
 volumes:
   wordpress:
     name: wordpress
@@ -47,14 +57,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/kcisse/data/wordpress
+      device: ${HOME}/data/wordpress
   mariadb:
     name: mariadb
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/kcisse/data/mariadb
+      device: ${HOME}/data/mariadb
 
 networks:
   inception:

@@ -4,7 +4,7 @@ RUN apt-get -y update && apt-get -y upgrade && \
 	apt-get -y install nginx openssl
 
 RUN mkdir -p /etc/nginx/sites-enabled/ /etc/nginx/sites-available/ /etc/nginx/tls \
-	/var/www/site /var/www/wordpress /etc/nginx/snippets
+	/var/www/wordpress /etc/nginx/snippets
 
 RUN openssl req -x509 -nodes -days 365 -out /etc/nginx/tls/tls.crt \
 	-keyout /etc/nginx/tls/tls.key \
