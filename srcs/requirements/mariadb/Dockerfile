@@ -5,7 +5,7 @@ RUN apt-get -y update && apt-get -y upgrade && \
 
 RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 
-COPY conf/50-custom.cnf /etc/mysql/mariadb.conf.d/50-custom.cnf
+COPY conf/50-zcustom.cnf /etc/mysql/mariadb.conf.d/50-zcustom.cnf
 
 COPY conf/mariadb-conf.sh /mariadb-conf.sh
 
