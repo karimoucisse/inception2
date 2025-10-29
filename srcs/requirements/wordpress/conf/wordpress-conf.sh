@@ -28,7 +28,7 @@ wp config create 	--allow-root \
 					--dbname="$DB_NAME" \
 					--dbuser="$DB_USER" \
 					--dbpass="$DB_PASS" \
-					--dbhost="mariadb:3306" \
+					--dbhost="$DB_HOST" \
 					--path="$WORDPRESS_PATH"
 
 
