@@ -54,6 +54,17 @@ services:
       ADMINER_DEFAULT_SERVER: mariadb
     restart: always
 
+  static-website:
+    container_name: static-website
+    networks:
+      - inception
+    depends_on:
+      - nginx
+    build: requirements/bonus/static-website
+    ports:
+      - "8081:80"
+    # restart: always
+
 volumes:
   wordpress:
     name: wordpress
