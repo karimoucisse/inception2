@@ -9,6 +9,21 @@ if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
   exit 1
 fi
 
+if [ -z "$WORDPRESS_PATH" ] || [ -z "$DB_HOST" ] || [ -z "$DOMAIN_NAME" ]; then
+  echo "❌ Missing environment variables: WORDPRESS_PATH, DB_HOST, or DOMAIN_NAME"
+  exit 1
+fi
+
+if [ -z "$WP_TITLE" ] || [ -z "$ADMIN_USER" ] || [ -z "$ADMIN_PASS" ]; then
+  echo "❌ Missing environment variables: WP_TITLE, ADMIN_USER, or ADMIN_PASS"
+  exit 1
+fi
+
+if [ -z "$ADMIN_EMAIL" ] || [ -z "$SIMPLE_USER" ] || [ -z "$SIMPLE_USER_EMAIL" ] || [ -z "$SIMPLE_USER_PASS" ] || [ -z "$USER_ROLE" ]; then
+  echo "❌ Missing environment variables: SIMPLE_USER, SIMPLE_USER_EMAIL, SIMPLE_USER_PASS, or USER_ROLE"
+  exit 1
+fi
+
 wget https://wordpress.org/latest.tar.gz
 tar -xzvf latest.tar.gz
 cp -r wordpress/* $WORDPRESS_PATH
