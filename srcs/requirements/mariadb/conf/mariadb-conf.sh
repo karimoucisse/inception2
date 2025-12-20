@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+
+
+if [ -f $MARIADB_FILE_EXIST ]; then
+  echo "MariaDB is already configured."
+  exec mysqld --user=mysql
+fi
+
 echo "🚀 Starting MariaDB setup..."
 
 echo "DB_NAME=$DB_NAME"
@@ -27,5 +34,7 @@ echo "MariaDB configured successfully."
 
 mysqladmin shutdown
 echo "MariaDB container is running ..."
-exec mysqld_safe
+touch $MARIADB_FILE_EXIST
+
+exec mysqld --user=mysql
 

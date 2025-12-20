@@ -1,6 +1,7 @@
 services:
   mariadb:
     container_name: mariadb
+    image: mariadb
     build: requirements/mariadb
     env_file: .env
     volumes:
@@ -12,6 +13,7 @@ services:
     restart: always
 
   nginx:
+    image: nginx
     container_name: nginx
     build: requirements/nginx
     env_file: .env
@@ -27,6 +29,7 @@ services:
     restart: always
 
   wordpress:
+    image: wordpress
     container_name: wordpress
     env_file: .env
     volumes:
@@ -40,29 +43,31 @@ services:
       - "9000"
     restart: always
 
-  adminer:
-    container_name: adminer
-    env_file: .env
-    networks:
-      - inception
-    depends_on:
-      - mariadb
-    build: requirements/bonus/adminer
-    ports:
-      - "8080:80"
-    environment:
-      ADMINER_DEFAULT_SERVER: mariadb
-    restart: always
+  # adminer:
+  #   image: adminer
+  #   container_name: adminer
+  #   env_file: .env
+  #   networks:
+  #     - inception
+  #   depends_on:
+  #     - mariadb
+  #   build: requirements/bonus/adminer
+  #   ports:
+  #     - "8080:80"
+  #   environment:
+  #     ADMINER_DEFAULT_SERVER: mariadb
+  #   restart: always
 
-  static-website:
-    container_name: static-website
-    networks:
-      - inception
-    depends_on:
-      - nginx
-    build: requirements/bonus/static-website
-    ports:
-      - "8081:80"
+  # static-website:
+  #   image: static-website
+  #   container_name: static-website
+  #   networks:
+  #     - inception
+  #   depends_on:
+  #     - nginx
+  #   build: requirements/bonus/static-website
+  #   ports:
+  #     - "8081:80"
     # restart: always
 
 volumes:
@@ -72,14 +77,15 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ${HOME}/data/wordpress
+      device: '/home/cisse/data/wordpress'
+
   mariadb:
     name: mariadb
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ${HOME}/data/mariadb
+      device: '/home/cisse/data/mariadb'
 
 networks:
   inception:

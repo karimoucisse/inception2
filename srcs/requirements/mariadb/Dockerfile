@@ -1,4 +1,4 @@
-FROM debian:12.12
+FROM debian:bookworm
 
 RUN apt-get -y update && apt-get -y upgrade && \
 	apt-get install -y mariadb-server
@@ -14,4 +14,5 @@ RUN chmod +x /mariadb-conf.sh
 EXPOSE 3306
 
 ENTRYPOINT ["/mariadb-conf.sh"]
+
 

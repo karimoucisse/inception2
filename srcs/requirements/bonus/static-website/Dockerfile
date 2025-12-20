@@ -1,10 +1,11 @@
 FROM debian:12.12
 
+RUN apt-get -y update && apt-get -y upgrade && \
+	apt-get -y install curl procps
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+COPY server /server
+COPY deezer /deezer
 
-RUN mkdir -p /etc/nginx/sites-enabled/ /etc/nginx/sites-available/ /etc/nginx/tls \
-	/var/www/deezer
-
-COPY content/deezer /var/www/deezer
-
-COPY conf/website-nginx.conf /etc/nginx/sites-available/website-nginx.conf
-RUN ln -s /etc/nginx/sites-available/website-nginx.conf /etc/nginx/sites-enabled/website-nginx.conf
+COPY conf/test.sh /test.sh
+RUN chmod +x /test.sh
+ENTRYPOINT [ "/test.sh" ]

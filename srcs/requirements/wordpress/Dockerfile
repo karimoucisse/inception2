@@ -1,7 +1,7 @@
 FROM debian:12.12
 
 RUN apt-get update -y && apt-get upgrade -y && \
-	apt-get -y install php8.2-fpm php-mysql wget tar
+	apt-get -y install php.fpm php-mysql wget tar
 
 
 RUN mkdir -p /var/www/wordpress /run/php
