@@ -14,5 +14,3 @@ RUN chmod +x /mariadb-conf.sh
 EXPOSE 3306
 
 ENTRYPOINT ["/mariadb-conf.sh"]
-
-

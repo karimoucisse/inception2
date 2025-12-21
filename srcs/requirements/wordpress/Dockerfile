@@ -1,7 +1,7 @@
 FROM debian:bookworm
 
-RUN apt-get update -y && apt-get upgrade -y && \
-	apt-get -y install php-fpm php-mysql wget tar
+RUN apt-get -y update && apt-get -y upgrade && \
+	apt-get -y install php php-fpm php-mysql wget tar mariadb-client
 
 RUN mkdir -p /var/www/wordpress /run/php
 

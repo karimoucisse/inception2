@@ -1,7 +1,7 @@
 services:
   mariadb:
     container_name: mariadb
-    image: mariadb
+    # image: mariadb
     build: requirements/mariadb
     env_file: .env
     volumes:
@@ -13,7 +13,7 @@ services:
     restart: always
 
   nginx:
-    image: nginx
+    # image: nginx
     container_name: nginx
     build: requirements/nginx
     env_file: .env
@@ -29,8 +29,9 @@ services:
     restart: always
 
   wordpress:
-    image: wordpress
+    # image: wordpress
     container_name: wordpress
+    build: requirements/wordpress
     env_file: .env
     volumes:
       - wordpress:/var/www/wordpress
@@ -38,7 +39,6 @@ services:
       - inception
     depends_on:
       - mariadb
-    build: requirements/wordpress
     expose:
       - "9000"
     restart: always

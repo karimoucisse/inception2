@@ -1,13 +1,19 @@
 #!/bin/bash
 
+if [ -f $WORDPRESS_FILE_EXIST ]; then
+  echo "Wordpress is already configured."
+  exec /usr/sbin/php-fpm8.2 -F
+fi
+
 echo "Installing Wordpress ..."
-echo "DB_NAME=$DB_NAME"
-echo "DB_USER=$DB_USER"
 
 if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
   echo "❌ Missing environment variables: DB_NAME, DB_USER, or DB_PASS"
   exit 1
 fi
+
+echo "DB_NAME=$DB_NAME"
+echo "DB_USER=$DB_USER"
 
 if [ -z "$WORDPRESS_PATH" ] || [ -z "$DB_HOST" ] || [ -z "$DOMAIN_NAME" ]; then
   echo "❌ Missing environment variables: WORDPRESS_PATH, DB_HOST, or DOMAIN_NAME"
@@ -29,7 +35,7 @@ tar -xzvf latest.tar.gz
 cp -r wordpress/* $WORDPRESS_PATH
 rm -rf wordpress
 rm -rf latest.tar.gz
-chown -R www-data:www-data /var/www/wordpress
+chown -R www-data:www-data $WORDPRESS_PATH
 chmod -R 755 $WORDPRESS_PATH
 
 echo "Installing Wordpress CLI ..."
@@ -54,7 +60,7 @@ wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" --admin_user="$ADMIN_US
 wp user create "$SIMPLE_USER" "$SIMPLE_USER_EMAIL" --user_pass="$SIMPLE_USER_PASS" --role="$USER_ROLE" --allow-root
 
 echo "Wordpress container is running ..."
-touch created
+touch $WORDPRESS_FILE_EXIST
 exec /usr/sbin/php-fpm8.2 -F
 
 

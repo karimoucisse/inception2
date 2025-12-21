@@ -1,14 +1,10 @@
 #!/bin/bash
-set -e
-
-
 
 if [ -f $MARIADB_FILE_EXIST ]; then
   echo "MariaDB is already configured."
   exec mysqld --user=mysql
 fi
 
-echo "🚀 Starting MariaDB setup..."
 
 echo "DB_NAME=$DB_NAME"
 echo "DB_USER=$DB_USER"
@@ -19,22 +15,37 @@ if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
 fi
 
 echo "Starting MariaDB temporarily..."
-mysqld_safe --skip-networking &
-sleep 5
 
-echo "Creating database and user..."
-mariadb -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;"
-mariadb -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';"
-mariadb -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%' WITH GRANT OPTION;"
-mariadb -e "FLUSH PRIVILEGES;"
+# Créer les répertoires avec les bonnes permissions
+# mkdir -p /var/lib/mysql
+# mkdir -p /run/mysqld
+# chown -R mysql:mysql /var/lib/mysql
+# chown -R mysql:mysql /run/mysqld
+# chmod 755 /var/lib/mysql
+# chmod 755 /run/mysqld
 
+# Initialiser la base de données
+mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-echo "MariaDB configured successfully."
-# mariadb -e "SELECT User FROM mysql.user;"
+# Démarrer MariaDB temporairement pour la configuration
+mysqld --user=mysql --skip-grant-tables &
+MARIADB_PID=$!
+sleep 3
 
-mysqladmin shutdown
-echo "MariaDB container is running ..."
+# Configuration des bases et utilisateurs
+mysql -u root <<EOF
+CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
+CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';
+GRANT ALL PRIVILEGES ON \`$DB_NAME\`.* TO '$DB_USER'@'%';
+FLUSH PRIVILEGES;
+EOF
+
+# Arrêter le processus temporaire
+kill $MARIADB_PID
+sleep 2
+
+# Marquer comme configuré
 touch $MARIADB_FILE_EXIST
 
+# Lancer MariaDB en tant que PID 1
 exec mysqld --user=mysql
-
