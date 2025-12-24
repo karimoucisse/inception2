@@ -15,4 +15,7 @@ RUN openssl req -x509 -nodes -days 365 -out /etc/nginx/tls/tls.crt \
 COPY conf/ssl-php.conf /etc/nginx/sites-available/ssl-php.conf
 RUN ln -s /etc/nginx/sites-available/ssl-php.conf /etc/nginx/sites-enabled/ssl-php.conf
 
-CMD ["nginx", "-g", "daemon off;"]
+COPY conf/nginx-conf.sh /tmp/nginx-conf.sh
+RUN chmod +x /tmp/nginx-conf.sh
+
+ENTRYPOINT ["/tmp/nginx-conf.sh"]

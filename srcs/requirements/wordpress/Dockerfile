@@ -4,6 +4,8 @@ RUN apt-get -y update && apt-get -y upgrade && \
 	apt-get -y install php php-fpm php-mysql wget tar mariadb-client \
     && rm -rf /var/lib/apt/lists/*
 
+RUN sed -i 's/listen = \/run\/php\/php8.2-fpm.sock/listen = 9000/g' /etc/php/8.2/fpm/pool.d/www.conf
+
 RUN mkdir -p /var/www/wordpress /run/php
 
 RUN chmod -R 755 /var/www/wordpress
