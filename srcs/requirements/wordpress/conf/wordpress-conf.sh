@@ -1,19 +1,13 @@
 #!/bin/bash
 
-if [ -f $WORDPRESS_FILE_EXIST ]; then
-  echo "Wordpress is already configured."
-  exec /usr/sbin/php-fpm8.2 -F
-fi
-
 echo "Installing Wordpress ..."
+echo "DB_NAME=$DB_NAME"
+echo "DB_USER=$DB_USER"
 
 if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
   echo "❌ Missing environment variables: DB_NAME, DB_USER, or DB_PASS"
   exit 1
 fi
-
-echo "DB_NAME=$DB_NAME"
-echo "DB_USER=$DB_USER"
 
 if [ -z "$WORDPRESS_PATH" ] || [ -z "$DB_HOST" ] || [ -z "$DOMAIN_NAME" ]; then
   echo "❌ Missing environment variables: WORDPRESS_PATH, DB_HOST, or DOMAIN_NAME"
@@ -30,12 +24,21 @@ if [ -z "$ADMIN_EMAIL" ] || [ -z "$SIMPLE_USER" ] || [ -z "$SIMPLE_USER_EMAIL" ]
   exit 1
 fi
 
+echo "En attente de MariaDB sur $DB_HOST..."
+while ! mariadb -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -e "SELECT 1;" >/dev/null 2>&1; do
+    echo "MariaDB n'est pas encore prêt... (sommeil 2s)"
+    sleep 2
+done
+
+echo "MariaDB est en ligne ! On continue l'installation."
+
 wget https://wordpress.org/latest.tar.gz
 tar -xzvf latest.tar.gz
 cp -r wordpress/* $WORDPRESS_PATH
 rm -rf wordpress
 rm -rf latest.tar.gz
-chown -R www-data:www-data $WORDPRESS_PATH
+
+chown -R www-data:www-data /var/www/wordpress
 chmod -R 755 $WORDPRESS_PATH
 
 echo "Installing Wordpress CLI ..."
@@ -54,13 +57,13 @@ wp config create 	--allow-root \
 
 
 # # install wordpress with the given title, admin username, password and email
-wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" --admin_user="$ADMIN_USER" --admin_password="$ADMIN_PASS" --admin_email="$ADMIN_EMAIL" --allow-root
+wp core install --url="$DOMAIN_NAME" --path="$WORDPRESS_PATH" --title="$WP_TITLE" --admin_user="$ADMIN_USER" --admin_password="$ADMIN_PASS" --admin_email="$ADMIN_EMAIL" --allow-root
 # #create a new user with the given username, email, password and role
 # # Available role: 'administrator', 'editor', 'author', 'contributor', 'subscriber'
-wp user create "$SIMPLE_USER" "$SIMPLE_USER_EMAIL" --user_pass="$SIMPLE_USER_PASS" --role="$USER_ROLE" --allow-root
+wp user create "$SIMPLE_USER" "$SIMPLE_USER_EMAIL" --path="$WORDPRESS_PATH" --user_pass="$SIMPLE_USER_PASS" --role="$USER_ROLE" --allow-root
 
 echo "Wordpress container is running ..."
-touch $WORDPRESS_FILE_EXIST
+touch created
 exec /usr/sbin/php-fpm8.2 -F
 
 
