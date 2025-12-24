@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ -f $MARIADB_FILE_EXIST ]; then
+   echo "MariaDB est configurée."
+   exec mysqld --user=mysql
+fi
+
 # Vérification des variables d'environnement
 if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
   echo "Erreur: Variables DB_NAME, DB_USER, ou DB_PASS manquantes."
@@ -25,5 +30,6 @@ EOF
 
 echo "MariaDB est configurée."
 
+touch $MARIADB_FILE_EXIST
 # Lancer le processus principal au premier plan
 exec mysqld --user=mysql
