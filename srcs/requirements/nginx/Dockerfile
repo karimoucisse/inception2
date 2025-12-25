@@ -1,7 +1,7 @@
 FROM debian:bookworm
 
-RUN apt-get -y update && apt-get -y upgrade && \
-	apt-get -y install nginx openssl \
+RUN apt-get -y update \
+	&& apt-get -y install nginx openssl \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /etc/nginx/sites-enabled/ /etc/nginx/sites-available/ /etc/nginx/tls \
@@ -19,3 +19,4 @@ COPY conf/nginx-conf.sh /tmp/nginx-conf.sh
 RUN chmod +x /tmp/nginx-conf.sh
 
 ENTRYPOINT ["/tmp/nginx-conf.sh"]
+

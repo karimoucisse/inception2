@@ -1,0 +1,12 @@
+https://oleks.ca/2024/09/30/installer-wordpress-sur-debian-12-avec-lamp/
+https://oleks.ca/2024/09/08/installation-de-mariadb-sur-debian/
+https://www.ionos.fr/digitalguide/hebergement/blogs/installer-wordpress-sur-nginx/
+https://zonetuto.fr/linux/comprendre-arborescence-des-dossiers-du-systeme-gnu-unix/
+https://oleks.ca/2024/09/08/installation-de-mariadb-sur-debian/
+https://wp-cli.org/
+https://dev.to/davidmm1707/docker-basics-for-beginners-49l9
+https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/securing_networks/creating-and-managing-tls-keys-and-certificates_securing-networks
+https://docs.redhat.com/fr/documentation/red_hat_enterprise_linux/9/html/deploying_web_servers_and_reverse_proxies/setting-up-and-configuring-nginx_deploying-web-servers-and-reverse-proxies
+https://stackoverflow.com/questions/51399883/adding-ssl-certs-to-nginx-docker-container
+https://codingwithmanny.medium.com/configure-self-signed-ssl-for-nginx-docker-from-a-scratch-7c2bcd5478c6
+https://www.youtube.com/watch?v=gZ6uwd2ki4s
