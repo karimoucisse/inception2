@@ -50,7 +50,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: '/home/cisse/data/wordpress'
+      device: '/home/${LOGIN}/data/wordpress'
 
   mariadb:
     name: mariadb
@@ -58,7 +58,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: '/home/cisse/data/mariadb'
+      device: '/home/${LOGIN}/data/mariadb'
 
 networks:
   inception:
