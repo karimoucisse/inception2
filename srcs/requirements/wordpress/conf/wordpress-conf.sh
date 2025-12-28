@@ -31,14 +31,13 @@ if [ -z "$ADMIN_EMAIL" ] || [ -z "$SIMPLE_USER" ] || [ -z "$SIMPLE_USER_EMAIL" ]
   exit 1
 fi
 
-echo "En attente de MariaDB sur $DB_HOST..."
+echo "Waiting for $DB_HOST..."
 while ! mariadb -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -e "SELECT 1;" >/dev/null 2>&1; do
-    echo "MariaDB n'est pas encore prêt... (sommeil 2s)"
+    echo "MariaDB is not ready yet... (sleeping 2s)"
     sleep 2
 done
 
-echo "MariaDB est en ligne ! On continue l'installation."
-
+echo "MariaDB is online! Continuing installation."
 wget https://wordpress.org/latest.tar.gz
 tar -xzvf latest.tar.gz
 cp -r wordpress/* $WORDPRESS_PATH
@@ -53,6 +52,8 @@ wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 
+echo "wp-config.php creation"
+
 wp config create 	--allow-root \
 					--dbname="$DB_NAME" \
 					--dbuser="$DB_USER" \
@@ -60,11 +61,10 @@ wp config create 	--allow-root \
 					--dbhost="$DB_HOST" \
 					--path="$WORDPRESS_PATH"
 
+echo "Wordpress configuration file created."
 
-# # install wordpress with the given title, admin username, password and email
+
 wp core install --url="$DOMAIN_NAME" --path="$WORDPRESS_PATH" --title="$WP_TITLE" --admin_user="$ADMIN_USER" --admin_password="$ADMIN_PASS" --admin_email="$ADMIN_EMAIL" --allow-root
-# #create a new user with the given username, email, password and role
-# # Available role: 'administrator', 'editor', 'author', 'contributor', 'subscriber'
 wp user create "$SIMPLE_USER" "$SIMPLE_USER_EMAIL" --path="$WORDPRESS_PATH" --user_pass="$SIMPLE_USER_PASS" --role="$USER_ROLE" --allow-root
 
 echo "Wordpress container is running ..."
