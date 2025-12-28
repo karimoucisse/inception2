@@ -1,0 +1,41 @@
+1. Analyse de ton code Nginx
+Ce bloc est ce qu'on appelle un Server Block (l'équivalent d'un Virtual Host chez Apache). Il définit comment Nginx doit traiter les requêtes arrivant sur le port 443.
+
+La connexion sécurisée (SSL/TLS)
+listen 443 ssl; : Le serveur écoute sur le port 443 (le port standard du HTTPS) en utilisant le protocole SSL/TLS.
+
+listen [::]:443 ssl; : Même chose, mais pour l'IPv6.
+
+ssl_certificate & ssl_certificate_key : Indiquent les chemins vers ton certificat public et ta clé privée. C'est ce qui permet de chiffrer la connexion et d'afficher le petit cadenas vert.
+
+ssl_protocols TLSv1.3; : Tu forces l'utilisation de la version 1.3 de TLS, qui est la plus récente et la plus sécurisée.
+
+L'identification et les fichiers
+server_name _; : Le _ est un "catch-all". Cela signifie que ce bloc répondra à n'importe quel nom de domaine qui pointe vers l'IP du serveur, si aucun autre bloc ne correspond mieux.
+
+root /var/www/wordpress; : C'est le dossier racine où se trouvent tes fichiers (ton site WordPress).
+
+index index.php index.html; : Si un visiteur demande mondomaine.fr/, Nginx cherchera d'abord un fichier nommé index.php, puis index.html.
+
+Le traitement du PHP
+location ~ \.php$ { ... } : C'est une expression régulière qui dit : "Si le fichier demandé se termine par .php, fais ceci".
+
+fastcgi_pass wordpress:9000; : C'est le point crucial. Nginx ne sait pas lire le PHP. Il l'envoie donc à un moteur externe (PHP-FPM) situé sur un autre service/conteneur nommé wordpress sur le port 9000.
+
+Résumé du flux de ta configuration
+Quand un utilisateur tape l'adresse de ton site :
+
+Le navigateur contacte le port 443.
+
+Nginx établit une connexion sécurisée grâce à tes fichiers TLS.
+
+L'utilisateur demande la page d'accueil, Nginx voit qu'il doit chercher index.php.
+
+Grâce au bloc location, Nginx envoie ce fichier au conteneur wordpress:9000.
+
+Le conteneur WordPress exécute le code PHP et renvoie du HTML à Nginx.
+
+Nginx renvoie ce HTML au navigateur de l'utilisateur.
+
+
+

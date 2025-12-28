@@ -7,7 +7,7 @@ if [ -f $MARIADB_FILE_EXIST ]; then
 fi
 
 if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
-  echo "Error: Missing environment variables: DB_NAME, DB_USER, or DB_PASS"
+  echo "Missing environment variables: DB_NAME, DB_USER, or DB_PASS"
   exit 1
 fi
 
