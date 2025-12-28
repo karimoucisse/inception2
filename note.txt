@@ -37,5 +37,33 @@ Le conteneur WordPress exécute le code PHP et renvoie du HTML à Nginx.
 
 Nginx renvoie ce HTML au navigateur de l'utilisateur.
 
+Pour que ton site fonctionne, le serveur web (Nginx/PHP) doit avoir le droit de lire et modifier les fichiers.
+
+chown -R www-data:www-data : On dit que le "propriétaire" des fichiers est www-data (l'utilisateur standard pour les serveurs web).
+
+chmod -R 755 : On donne les permissions de lecture/écriture. Sans ça, tu ne pourrais pas uploader d'images sur ton blog !
+
+WP-CLI, c'est WordPress mais en ligne de commande. Au lieu de cliquer sur des boutons dans un navigateur, tu tapes des ordres. C'est indispensable pour automatiser l'installation dans Docker.
+
+Étape 5 : L'installation automatique
+C'est la partie la plus "magique" :
+
+wp core install : Simule le clic sur le bouton "Installer" de WordPress. Il crée le titre du site, le compte administrateur et ton email.
+
+wp user create : Crée un deuxième utilisateur (un utilisateur simple) automatiquement.
+
+Pourquoi fait-on ça dans Docker ?
+Si tu n'avais pas ce script, tu devrais :
+
+Lancer le conteneur.
+
+Aller sur ton navigateur.
+
+Taper toutes les infos à la main.
+
+Recommencer à chaque fois que tu recrées ton infrastructure.
+
+Avec ce script, tu tapes une commande (docker-compose up) et tout ton site est prêt en 30 secondes, utilisateurs inclus.
+
 
 

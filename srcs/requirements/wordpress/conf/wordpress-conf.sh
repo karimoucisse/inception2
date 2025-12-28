@@ -38,22 +38,25 @@ while ! mariadb -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -e "SELECT 1;" >/dev/nu
 done
 
 echo "MariaDB is online! Continuing installation."
+# Downloading last version of Wordpress ...
 wget https://wordpress.org/latest.tar.gz
+# decompressing  WordPress package
 tar -xzvf latest.tar.gz
+# copinging wordpress files to the path
 cp -r wordpress/* $WORDPRESS_PATH
 rm -rf wordpress
 rm -rf latest.tar.gz
 
-chown -R www-data:www-data /var/www/wordpress
-chmod -R 755 $WORDPRESS_PATH
 
 echo "Installing Wordpress CLI ..."
+# Download wp-cli
 wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 
 echo "wp-config.php creation"
 
+# Creating WordPress configuration file wp-config.php
 wp config create 	--allow-root \
 					--dbname="$DB_NAME" \
 					--dbuser="$DB_USER" \

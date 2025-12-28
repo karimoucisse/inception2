@@ -11,10 +11,11 @@ if [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASS" ]; then
   exit 1
 fi
 
-if [ ! -d "/var/lib/mysql/mysql" ]; then
-    echo "Initializing data directory..."
-    mysql_install_db --user=mysql --datadir=/var/lib/mysql --rpm
-fi
+# Verify if folders exists
+# if [ ! -d "/var/lib/mysql/mysql" ]; then
+#     echo "Initializing data directory..."
+# fi
+mysql_install_db --user=mysql --datadir=/var/lib/mysql --rpm
 
 mysqld --user=mysql --bootstrap << EOF
 FLUSH PRIVILEGES;
